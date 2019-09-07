@@ -1,15 +1,21 @@
 package com.mjb.android.mvvm.ui.photos
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mjb.android.mvvm.R
 import com.mjb.android.mvvm.di.InjectableActivity
+import com.mjb.android.mvvm.network.Status
 import com.mjb.android.mvvm.util.AppExecutors
 
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_photos.*
+import kotlinx.android.synthetic.main.content_photos.*
+import java.lang.Error
 import javax.inject.Inject
 
 class PhotosActivity : InjectableActivity() {
@@ -18,31 +24,39 @@ class PhotosActivity : InjectableActivity() {
     lateinit var appExecutors: AppExecutors
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+    private lateinit var photosAdapter: PhotosAdapter
+    private lateinit var photosViewModel: PhotosViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_photos)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        photosViewModel =
+            ViewModelProvider(viewModelStore, viewModelFactory).get(PhotosViewModel::class.java)
+
+        photosAdapter = PhotosAdapter(appExecutors) {
+
         }
+        recyclerView.adapter = photosAdapter
+
+        fetchPhotos()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    private fun fetchPhotos() {
+        progressBar.visibility = VISIBLE
+        photosViewModel.getPhotos().observe(this, Observer {
+            when (it.status) {
+                Status.ERROR -> {
+                    Toast.makeText(this@PhotosActivity, it.message, Toast.LENGTH_SHORT).show()
+                    progressBar.visibility = GONE
+                }
+                Status.SUCCESS -> {
+                    photosAdapter.submitList(it.data)
+                    progressBar.visibility = GONE
+                }
+            }
+        })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 }

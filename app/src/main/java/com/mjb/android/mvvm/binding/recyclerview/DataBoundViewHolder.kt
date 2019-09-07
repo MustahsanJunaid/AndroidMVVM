@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.mjb.android.mvvm.di
+package com.mjb.android.mvvm.binding.recyclerview
 
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 
-import com.mjb.android.mvvm.ui.photos.PhotosActivity
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
-
-@Suppress("unused")
-@Module
-abstract class ActivityModule {
-
-    @ContributesAndroidInjector
-    abstract fun contributePhotosActivity(): PhotosActivity
-
-}
+/**
+ * A generic ViewHolder that works with a [ViewDataBinding].
+ * @param <T> The type of the ViewDataBinding.
+</T> */
+class DataBoundViewHolder<out T : ViewDataBinding> constructor(val binding: T) :
+    RecyclerView.ViewHolder(binding.root)

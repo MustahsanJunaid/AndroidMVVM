@@ -18,7 +18,7 @@ package com.mjb.android.mvvm.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mjb.android.mvvm.ui.photos.MainViewModel
+import com.mjb.android.mvvm.ui.photos.PhotosViewModel
 
 
 import dagger.Binds
@@ -31,8 +31,9 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(MainViewModel::class)
-    abstract fun bindMainViewModel(colorsViewModel: MainViewModel): ViewModel
+    @ViewModelKey(PhotosViewModel::class)
+    abstract fun bindPhotosViewModel(colorsViewModel: PhotosViewModel): ViewModel
 
+    @Binds
     abstract fun bindViewModelFactory(factory: MvvmViewModelFactory): ViewModelProvider.Factory
 }
