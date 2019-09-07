@@ -1,14 +1,23 @@
-package com.mjb.android.mvvm
+package com.mjb.android.mvvm.ui.photos
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
+import com.mjb.android.mvvm.R
+import com.mjb.android.mvvm.di.InjectableActivity
+import com.mjb.android.mvvm.util.AppExecutors
 
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class PhotosActivity : InjectableActivity() {
+
+    @Inject
+    lateinit var appExecutors: AppExecutors
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
