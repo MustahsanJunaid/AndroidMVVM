@@ -9,6 +9,6 @@ import androidx.room.RoomDatabase
         exportSchema = false
 )
 
-abstract class MvvmDatabase : RoomDatabase() {
+abstract class MvvmDb : RoomDatabase() {
         abstract fun photosDao(): PhotosDao
 }

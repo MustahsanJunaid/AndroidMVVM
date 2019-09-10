@@ -1,21 +1,19 @@
 package com.mjb.android.mvvm.ui.photos
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mjb.android.mvvm.R
+import com.mjb.android.mvvm.database.Photo
 import com.mjb.android.mvvm.di.InjectableActivity
 import com.mjb.android.mvvm.network.Status
 import com.mjb.android.mvvm.util.AppExecutors
-
+import com.mjb.android.mvvm.util.VerticalSpacingDecoration
 import kotlinx.android.synthetic.main.activity_photos.*
 import kotlinx.android.synthetic.main.content_photos.*
-import java.lang.Error
 import javax.inject.Inject
 
 class PhotosActivity : InjectableActivity() {
@@ -24,7 +22,6 @@ class PhotosActivity : InjectableActivity() {
     lateinit var appExecutors: AppExecutors
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var photosAdapter: PhotosAdapter
     private lateinit var photosViewModel: PhotosViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,12 +31,6 @@ class PhotosActivity : InjectableActivity() {
 
         photosViewModel =
             ViewModelProvider(viewModelStore, viewModelFactory).get(PhotosViewModel::class.java)
-
-        photosAdapter = PhotosAdapter(appExecutors) {
-
-        }
-        recyclerView.adapter = photosAdapter
-
         fetchPhotos()
     }
 
@@ -52,11 +43,17 @@ class PhotosActivity : InjectableActivity() {
                     progressBar.visibility = GONE
                 }
                 Status.SUCCESS -> {
-                    photosAdapter.submitList(it.data)
+                    it.data?.let { it1 -> prepareData(it1) }
                     progressBar.visibility = GONE
                 }
             }
         })
+    }
+
+
+    private fun prepareData(data: List<Photo>) {
+        val albums = data.groupBy { it.albumId }
+        recyclerView.adapter = AlbumsAdapter(appExecutors, albums)
     }
 
 }

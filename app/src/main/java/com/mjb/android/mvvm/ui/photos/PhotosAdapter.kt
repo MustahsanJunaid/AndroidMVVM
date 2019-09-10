@@ -1,21 +1,20 @@
 package com.mjb.android.mvvm.ui.photos
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mjb.android.mvvm.R
 import com.mjb.android.mvvm.binding.recyclerview.DataBoundListAdapter
 import com.mjb.android.mvvm.database.Photo
 import com.mjb.android.mvvm.databinding.ItemPhotoBinding
 import com.mjb.android.mvvm.util.AppExecutors
 
-/**
- * Created by Mustahsan on 05-Aug-17.
- */
-
 class PhotosAdapter(
     appExecutors: AppExecutors,
+    private val span: Int,
     private val repoClickCallback: ((Photo) -> Unit)?
 ) : DataBoundListAdapter<Photo, ItemPhotoBinding>(
     appExecutors = appExecutors,
@@ -40,6 +39,7 @@ class PhotosAdapter(
                 parent,
                 false
             )
+//        binding.imageView.adjust(parent, span, LinearLayoutManager.VERTICAL, 0, 1f)
         return binding
     }
 
@@ -52,4 +52,25 @@ class PhotosAdapter(
         binding.photo = item
     }
 }
+
+fun View.adjust(
+    parent: ViewGroup,
+    span: Int,
+    orientation: Int,
+    itemSpacing: Int,
+    ratio: Float = 1f
+) {
+    val parentSize = if (orientation == LinearLayoutManager.HORIZONTAL) {
+        parent.measuredHeight
+    } else {
+        parent.measuredWidth
+    }
+    val size = (parentSize / span) - ((itemSpacing * span) / 1.5)
+    layoutParams.apply {
+        width = size.toInt()
+        height = (size * ratio).toInt()
+    }
+}
+
+
 

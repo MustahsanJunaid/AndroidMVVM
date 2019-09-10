@@ -1,9 +1,11 @@
 package com.mjb.android.mvvm.database
 
 import androidx.room.*
+import com.mjb.android.mvvm.OpenForTesting
 
 
 @Dao
+@OpenForTesting
 interface BaseDao<T> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

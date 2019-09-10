@@ -19,7 +19,7 @@ package com.mjb.android.mvvm.di
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.mjb.android.mvvm.database.MvvmDatabase
+import com.mjb.android.mvvm.database.MvvmDb
 import com.mjb.android.mvvm.database.PhotosDao
 import com.mjb.android.mvvm.network.ApiService
 import com.mjb.android.mvvm.network.ConnectivityInterceptor
@@ -68,16 +68,16 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideDb(app: Application): MvvmDatabase {
+    fun provideDb(app: Application): MvvmDb {
         return Room
-            .databaseBuilder(app, MvvmDatabase::class.java, DATABASE)
+            .databaseBuilder(app, MvvmDb::class.java, DATABASE)
             .fallbackToDestructiveMigration()
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideBoardDao(db: MvvmDatabase): PhotosDao {
+    fun provideBoardDao(db: MvvmDb): PhotosDao {
         return db.photosDao()
     }
 
