@@ -1,2 +1,10 @@
-# AndroidMVVM
-Sample Project implemented with Android Architecture Component, Dagger2 and MVVM architecture.
+# Android MVVM
+Sample Project implemented in Kotlin with 
+- Android Architecture Components ( Room, Live Data etc.)
+- Dagger 2
+- Data Binding
+- MVVM architecture.
+
+Unit test have been implemented with
+- Junit
+- Mockito 
